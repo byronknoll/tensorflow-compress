@@ -2,10 +2,10 @@ import tensorflow as tf
 import sys
 import math
 
-num_hidden = 100
+num_hidden = 200
 horizon = 20
 num_layers = 1
-rate = 0.01
+rate = 0.005
 
 data = tf.placeholder(tf.float32, [None, horizon, 256])
 target = tf.placeholder(tf.float32, [horizon, 256])
@@ -70,10 +70,12 @@ with open(sys.argv[1:][0], "rb") as f:
           input_arr = [[]]
         byte_count += 1
         if byte_count % 1000 == 0:
-          s = repr(byte_count) + " " + repr(-cross_entropy/byte_count)
+          s = repr(byte_count) + ": " + repr(-cross_entropy/byte_count)
           print s
         last_byte = cur_byte
 
 cross_entropy = -cross_entropy / byte_count
-print cross_entropy
-print (cross_entropy/8)*byte_count
+s = "cross entropy: " + repr(cross_entropy)
+print s
+s = "output size: " + repr(int(round((cross_entropy/8)*byte_count)))
+print s

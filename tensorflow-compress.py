@@ -2,10 +2,10 @@ import tensorflow as tf
 import sys
 import math
 
-num_hidden = 200
+num_hidden = 100
 horizon = 20
 num_layers = 1
-rate = 0.005
+rate = 0.001
 
 data = tf.placeholder(tf.float32, [None, horizon, 256])
 target = tf.placeholder(tf.float32, [horizon, 256])
@@ -28,7 +28,10 @@ bias = tf.Variable(tf.constant(0.1, shape=[256]))
 prediction = tf.nn.softmax(tf.matmul(output, weight) + bias)
 loss = -tf.reduce_sum(target * tf.log(tf.clip_by_value(prediction,1e-10,1.0)))
 optimizer = tf.train.AdamOptimizer(learning_rate=rate)
-minimize = optimizer.minimize(loss)
+gvs = optimizer.compute_gradients(loss)
+capped_gvs = [(tf.clip_by_value(grad, -1., 1.), var) for grad, var in gvs]
+minimize = optimizer.apply_gradients(capped_gvs)
+#minimize = optimizer.minimize(loss)
 
 init_op = tf.initialize_all_variables()
 sess = tf.Session()

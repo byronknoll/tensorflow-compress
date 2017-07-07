@@ -31,7 +31,6 @@ optimizer = tf.train.AdamOptimizer(learning_rate=rate)
 gvs = optimizer.compute_gradients(loss)
 capped_gvs = [(tf.clip_by_value(grad, -1., 1.), var) for grad, var in gvs]
 minimize = optimizer.apply_gradients(capped_gvs)
-#minimize = optimizer.minimize(loss)
 
 init_op = tf.initialize_all_variables()
 sess = tf.Session()

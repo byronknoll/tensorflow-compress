@@ -1,3 +1,5 @@
+# tensorflow-compress
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/byronknoll/tensorflow-compress/blob/master/tensorflow-compress.ipynb)
 
 Made by Byron Knoll. GitHub repository: https://github.com/byronknoll/tensorflow-compress

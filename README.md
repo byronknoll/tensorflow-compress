@@ -27,11 +27,15 @@ Advanced usage: save a copy of this notebook and modify the code.
 *   [DeepZip](https://github.com/mohit1997/DeepZip) - this also performs compression using TensorFlow. However, it has some substantial architecture differences to tensorflow-compress: it uses pretraining (using multiple passes over the training data) and stores the model weights in the compressed file.
 
 ### Benchmarks
-These benchmarks were performed using tensorflow-compress v1 with the default parameter settings. Tesla P100 GPU was used in Colab Pro. Compression time and decompression time are approximately the same.
-*   enwik8: compressed to 20119747 bytes in 6990.38 seconds. NNCP preprocessing time: 594.33 seconds.
-*   enwik9: compressed to 159716240 bytes in 72260.21 seconds. NNCP preprocessing time: 4592.3 seconds.
+These benchmarks were performed using tensorflow-compress v2 with the default parameter settings. Some parameters differ between enwik8 and enwik9 as noted in the parameter comments. Colab Pro was used with Tesla V100 GPU. Compression time and decompression time are approximately the same.
+*   enwik8: compressed to 16828585 bytes in 10025.79 seconds. NNCP preprocessing time: 451.93 seconds. Dictionary size: 148961 bytes.
+*   enwik9: compressed to 127146379 bytes in 141752.48 seconds. NNCP preprocessing time: 15444.44 seconds. Dictionary size: 406799 bytes. Since Colab has a 24 hour time limit, the preprocessed enwik9 file was split into three parts using this command: "split -b 111M preprocessed.dat part.". The "checkpoint" option was used to save/load model weights between processing each part.
 
 See the [Large Text Compression Benchmark](http://mattmahoney.net/dc/text.html) for more information about the test files and a comparison with other programs.
 
 ### Versions
-v1 - released July 20, 2020.
+* v2 - released September 6, 2020. Changes from v1:
+  * 16 bit floats for improved speed
+  * Weight updates occur at every timestep (instead of at spaced intervals)
+  * Support for saving/loading model weights
+* v1 - released July 20, 2020.

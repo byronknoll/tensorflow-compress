@@ -27,13 +27,17 @@ Advanced usage: save a copy of this notebook and modify the code.
 *   [DeepZip](https://github.com/mohit1997/DeepZip) - this also performs compression using TensorFlow. However, it has some substantial architecture differences to tensorflow-compress: it uses pretraining (using multiple passes over the training data) and stores the model weights in the compressed file.
 
 ### Benchmarks
-These benchmarks were performed using tensorflow-compress v2 with the default parameter settings. Some parameters differ between enwik8 and enwik9 as noted in the parameter comments. Colab Pro was used with Tesla V100 GPU. Compression time and decompression time are approximately the same.
-*   enwik8: compressed to 16828585 bytes in 10025.79 seconds. NNCP preprocessing time: 451.93 seconds. Dictionary size: 148961 bytes.
-*   enwik9: compressed to 127146379 bytes in 141752.48 seconds. NNCP preprocessing time: 15444.44 seconds. Dictionary size: 406799 bytes. Since Colab has a 24 hour time limit, the preprocessed enwik9 file was split into three parts using this command: "split -b 111M preprocessed.dat part.". The "checkpoint" option was used to save/load model weights between processing each part.
+These benchmarks were performed using tensorflow-compress v3 with the default parameter settings. Some parameters differ between enwik8 and enwik9 as noted in the parameter comments. Colab Pro was used with Tesla V100 GPU. Compression time and decompression time are approximately the same.
+*   enwik8: compressed to 16,128,954 bytes in 32,113.38 seconds. NNCP preprocessing time: 206.38 seconds. Dictionary size: 65,987 bytes.
+*   enwik9: compressed to 118,938,744 bytes in 297,505.98 seconds. NNCP preprocessing time: 2,598.77 seconds. Dictionary size: 79,876 bytes. Since Colab has a 24 hour time limit, the preprocessed enwik9 file was split into four parts using [this notebook](https://colab.sandbox.google.com/github/byronknoll/tensorflow-compress/blob/master/nncp-splitter.ipynb). The "checkpoint" option was used to save/load model weights between processing each part. For the first part, start_learning_rate=0.0007 and end_learning_rate=0.0005 was used. For the remaining three parts, a constant 0.00035 learning rate was used.
 
 See the [Large Text Compression Benchmark](http://mattmahoney.net/dc/text.html) for more information about the test files and a comparison with other programs.
 
 ### Versions
+* v3 - released November 28, 2020. Changes from v2:
+  * Parameter tuning
+  * [New notebook](https://colab.sandbox.google.com/github/byronknoll/tensorflow-compress/blob/master/nncp-splitter.ipynb) for file splitting
+  * Support for learning rate decay
 * v2 - released September 6, 2020. Changes from v1:
   * 16 bit floats for improved speed
   * Weight updates occur at every timestep (instead of at spaced intervals)

@@ -21,19 +21,22 @@ Basic usage: configure all the fields in the "Parameters" section and select Run
 Advanced usage: save a copy of this notebook and modify the code.
 
 ### Related Projects
-*   [NNCP](https://bellard.org/nncp/) - this uses a similar LSTM architecture to tensorflow-compress. It is limited to running only on CPUs.
-*   [lstm-compress](https://github.com/byronknoll/lstm-compress) - similar to NNCP, but has a batch size limit of one (so it is significantly slower).
+*   [NNCP](https://bellard.org/nncp/) - this uses a similar architecture to tensorflow-compress, but with transformers rather than LSTM. NNCP currently outperforms tensorflow-compress: running faster, on a worse GPU, while getting better compression rate.
+*   [lstm-compress](https://github.com/byronknoll/lstm-compress) - uses LSTM for compression, but limited to running on a CPU with a batch size of one.
 *   [cmix](http://www.byronknoll.com/cmix.html) - shares the same LSTM code as lstm-compress, but contains a bunch of other components to get better compression rate.
 *   [DeepZip](https://github.com/mohit1997/DeepZip) - this also performs compression using TensorFlow. However, it has some substantial architecture differences to tensorflow-compress: it uses pretraining (using multiple passes over the training data) and stores the model weights in the compressed file.
 
 ### Benchmarks
-These benchmarks were performed using tensorflow-compress v3 with the default parameter settings. Some parameters differ between enwik8 and enwik9 as noted in the parameter comments. Colab Pro was used with Tesla V100 GPU. Compression time and decompression time are approximately the same.
-*   enwik8: compressed to 16,128,954 bytes in 32,113.38 seconds. NNCP preprocessing time: 206.38 seconds. Dictionary size: 65,987 bytes.
-*   enwik9: compressed to 118,938,744 bytes in 297,505.98 seconds. NNCP preprocessing time: 2,598.77 seconds. Dictionary size: 79,876 bytes. Since Colab has a 24 hour time limit, the preprocessed enwik9 file was split into four parts using [this notebook](https://colab.sandbox.google.com/github/byronknoll/tensorflow-compress/blob/master/nncp-splitter.ipynb). The "checkpoint" option was used to save/load model weights between processing each part. For the first part, start_learning_rate=0.0007 and end_learning_rate=0.0005 was used. For the remaining three parts, a constant 0.00035 learning rate was used.
+These benchmarks were performed using tensorflow-compress v4 with the default parameter settings. Some parameters differ between enwik8 and enwik9 as noted below. Compute Engine VM was used with A100 GPU. Compression time and decompression time are approximately the same.
+*   enwik8: compressed to 15,905,037 bytes in 32,048.55 seconds. NNCP preprocessing time: 206.38 seconds. Dictionary size: 65,987 bytes.
+*   enwik9: compressed to 113,542,413 bytes in 289,632.17 seconds. NNCP preprocessing time: 1,762.28 seconds. Dictionary size: 79,876 bytes. The preprocessed enwik9 file was split into four parts using [this notebook](https://colab.sandbox.google.com/github/byronknoll/tensorflow-compress/blob/master/nncp-splitter.ipynb). The "checkpoint" option was used to save/load model weights between processing each part. For the first part, start_learning_rate=0.0005 and end_learning_rate=0.0002 was used. For the remaining three parts, a constant 0.0002 learning rate was used.
 
 See the [Large Text Compression Benchmark](http://mattmahoney.net/dc/text.html) for more information about the test files and a comparison with other programs.
 
 ### Versions
+* v4 - released August 10, 2022. Changes from v3:
+  * Added embedding layer
+  * Tuned parameters to run on A100 GPU
 * v3 - released November 28, 2020. Changes from v2:
   * Parameter tuning
   * [New notebook](https://colab.sandbox.google.com/github/byronknoll/tensorflow-compress/blob/master/nncp-splitter.ipynb) for file splitting
